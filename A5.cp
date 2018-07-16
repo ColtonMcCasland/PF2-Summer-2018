@@ -2,7 +2,7 @@
 // Assignment 2 (Queues)
 //------------------------------------------------
 /*
- * C++ Program to Implement PRIORITY Queue
+ * C++ Program to Implement time Queue
  */
 //------------------------------------------------
 
@@ -22,7 +22,10 @@ using namespace std;
 
 struct node
 {
-    int time;
+    
+    
+    //old
+    int priority;
     string name;
     struct node *next;
 };
@@ -32,57 +35,64 @@ struct node
  */
 //------------------------------------------------
 
-class time_Queue
+class pQueue
 {
     
 private:
     node *front;
     
 public:
-    time_Queue()
+    pQueue()
     {
         front = NULL;
     }
+
 //------------------------------------------------
 /*
 * Insert into time Queue
 */
 //------------------------------------------------
-///////////////////UNDER CONSTRUCTION///////////////////////////////////////////////////////////
-    
-    
-void insert( int time, string name)
-    {
-        node *tmp, *q1;
+
+void insert( string name, int priority)
+{
+        node *tmp, *q;
         
         tmp = new node;
         tmp->name = name;
-        tmp->time = time;
+        tmp->priority = priority;
         
-        if ( empty() == true)
+        if ( front == NULL || priority < front->priority)
         {
             tmp->next = front;
             front = tmp;
         }
+        else
+        {
+            q = front;
+            while(q->next != NULL && q->next->priority <= priority)
+                q=q->next;
+                tmp->next = q->next;
+                q->next = tmp;
         
     }
+}
 //------------------------------------------------
 /*
 * Delete from time Queue
 */
 //------------------------------------------------
-    
+ //UNDER CONSTRUCTION///////////////////////////////////
 void del()
     {
         node *tmp;
         //if empty print nothing
         if(front == NULL)
-                cout<<"";
+                cout<<"Queue underflow\n";
         
         else
         {
             tmp = front;
-            
+            cout << "Deleted item is: " << tmp->name << endl;
             front = front->next;
             
             free(tmp);
@@ -103,46 +113,20 @@ void display()
         
         //if empty print nothing
         if (front == NULL)
-            cout<<"";
+            cout<<"Empty";
         
         else
         {
+            cout << "Queue is: " << endl;
+            cout << "Name       Priority\n";
             while(ptr != NULL)
             {
-                cout << ptr->name <<" ";
+                cout << ptr->name <<"           "<< ptr->priority << endl;
               
                 ptr = ptr->next;
             }
         }
     }
-
-//------------------------------------------------
-/*
- * Peek->and grab.
-*/
-//------------------------------------------------
-int peekTime()
-    {
-        
-        if(front == nullptr)
-            {
-                return NULL;
-            }
-        
-        else
-            return front->time;
-    }
-    
-string peekName()
-    {
-        return front->name;
-    }
-    
-bool empty()
-    {
-        return front == nullptr;
-    }
-    
 };
 
 //------------------------------------------------
@@ -150,70 +134,41 @@ bool empty()
  * Main
  */
 //------------------------------------------------
-
 int main()
 {
-    //prolly scratch all this vvv...
     
-    
-    //ints
-    int maxNumBone = 0, maxNumFun = 0;
-    int time = 0;
-    int numPeople;
-    int waitTime1, waitTime2;
-    //strings
+    int choice, priority;
     string name;
-    string input;
-    ifstream readFile;
-    //queues
-    time_Queue wildBones, no_funHouse, procQ;
-
-//---------------------------
-
-wildBones.insert(aTime, aName);
-//
-//                        cout <<  "      " << aName << " has entered the line for Mr. Bones' Wild Ride.\n";
-//                        cout << endl;
-//
-//                        //delete old
-//                        procQ.del();
-//
-//                        //increment
-//                        maxNumBone++;
-//                    }
-//
-//                //if the second line is shorter than the first
-//             else if(waitTime2 < waitTime1 )
-//                {
-//
-//                    no_funHouse.insert(aTime, aName);
-//
-//                    cout <<  "       " <<aName << " has entered the line for The No-Fun House.\n";
-//                    cout << endl;
-//
-//                    //delete old
-//                    procQ.del();
-//
-//                    //increment
-//                    maxNumFun ++;
-//                }
-//            }
-//
-//        //default print 1
-//            cout << endl;
-//            cout << "       Mr. Bones' Wild Ride line: ";
-//
-//            //print line
-//        wildBones.display();
-//
-//            cout << endl;
-//            cout << "       The No-Fun House line: ";
-//
-//            //print line
-//        no_funHouse.display();
-//            cout << endl;
-//            cout << "-------------------------"<<endl;
-//            cout << endl;
-//            cout << endl;
+    pQueue pq;
+    do
+    {
+        cout<<"1.Insert\n";
+        cout<<"2.Delete\n";
+        cout<<"3.Display\n";
+        cout<<"4.Quit\n";
+        cout<<"Enter your choice : ";
+        cin>>choice;
+        switch(choice)
+        {
+            case 1:
+                cout<<"Input the name to be added in the queue : ";
+                cin>>name;
+                cout<<"Enter its priority : ";
+                cin>>priority;
+                pq.insert(name, priority);
+                break;
+            case 2:
+                pq.del();
+                break;
+            case 3:
+                pq.display();
+                break;
+            case 4:
+                break;
+            default :
+                cout<<"Wrong choice\n";
+        }
     }
+    while(choice != 4);
+    return 0;
 }
