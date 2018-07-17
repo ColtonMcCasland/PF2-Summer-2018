@@ -23,6 +23,7 @@ using namespace std;
 //------------------------------------------------
 struct node
 {
+    int rank;
     int priority;
     string name;
     struct node *next;
@@ -51,7 +52,7 @@ public:
 */
 //------------------------------------------------
 
-void insert( string name, int priority)
+void insert( string name, int priority, char rank)
 {
         node *tmp, *q;
 
@@ -63,7 +64,7 @@ void insert( string name, int priority)
         //Check if no nodes exist or if temp node Priority
         //is less than the queue's front node.
         //(Front -> Back is Low -> High Priority)
-        if (front == NULL || priority < front->priority)
+        if (front == NULL || (priority < front->priority && rank < front->rank)
         {
             tmp->next = front;
             front = tmp;
@@ -74,7 +75,7 @@ void insert( string name, int priority)
             q = front;
 
             //Find Spot in Queue based on priority of node
-            while(q->next != NULL && q->next->priority <= priority)
+            while(q->next != NULL && priority >= q->next->priority  )
                 q = q->next;
 
                 //Reassign ptrs
@@ -152,7 +153,7 @@ int main()
         cout<<"2. Delete\n";
         cout<<"3. Display\n";
         cout<<"4. Quit\n";
-        cout<<"Enter your choice : ";
+        cout<<"Enter your choice: ";
         cin>>choice;
         switch(choice)
         {
