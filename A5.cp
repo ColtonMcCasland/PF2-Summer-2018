@@ -1,8 +1,10 @@
 // Name : Colton McCasland
-// Assignment 2 (Queues)
+//        Walter Niblock
+//
+// Assignment 5 (ADT(s) - Priority Queue Implementation)
 //------------------------------------------------
 /*
- * C++ Program to Implement time Queue
+ * C++ Program to Implement Priority Queue
  */
 //------------------------------------------------
 
@@ -19,12 +21,8 @@ using namespace std;
 * Node Declaration
 */
 //------------------------------------------------
-
 struct node
 {
-    
-    
-    //old
     int priority;
     string name;
     struct node *next;
@@ -37,10 +35,10 @@ struct node
 
 class pQueue
 {
-    
+
 private:
     node *front;
-    
+
 public:
     pQueue()
     {
@@ -56,25 +54,34 @@ public:
 void insert( string name, int priority)
 {
         node *tmp, *q;
-        
+
+        //Temporary (new) Node to insert
         tmp = new node;
         tmp->name = name;
         tmp->priority = priority;
-        
-        if ( front == NULL || priority < front->priority)
+
+        //Check if no nodes exist or if temp node Priority
+        //is less than the queue's front node.
+        //(Front -> Back is Low -> High Priority)
+        if (front == NULL || priority < front->priority)
         {
             tmp->next = front;
             front = tmp;
         }
+
         else
         {
             q = front;
+
+            //Find Spot in Queue based on priority of node
             while(q->next != NULL && q->next->priority <= priority)
-                q=q->next;
+                q = q->next;
+
+                //Reassign ptrs
                 tmp->next = q->next;
                 q->next = tmp;
-        
-    }
+
+        }
 }
 //------------------------------------------------
 /*
@@ -88,13 +95,13 @@ void del()
         //if empty print nothing
         if(front == NULL)
                 cout<<"Queue underflow\n";
-        
+
         else
         {
             tmp = front;
             cout << "Deleted item is: " << tmp->name << endl;
             front = front->next;
-            
+
             free(tmp);
         }
     }
@@ -105,24 +112,23 @@ void del()
 //------------------------------------------------
 void display()
     {
-        
         node *ptr;
-        
+
         //pointers
         ptr = front;
-        
+
         //if empty print nothing
         if (front == NULL)
             cout<<"Empty";
-        
+
         else
         {
-            cout << "Queue is: " << endl;
-            cout << "Name       Priority\n";
+            cout << "Queue is: \n";
+            cout << setw(5) << "Priority" << " | " << "Name\n";
             while(ptr != NULL)
             {
-                cout << ptr->name <<"           "<< ptr->priority << endl;
-              
+                cout << setw(5) << ptr->priority << " | " << ptr->name << endl;
+
                 ptr = ptr->next;
             }
         }
@@ -136,16 +142,16 @@ void display()
 //------------------------------------------------
 int main()
 {
-    
+
     int choice, priority;
     string name;
     pQueue pq;
     do
     {
-        cout<<"1.Insert\n";
-        cout<<"2.Delete\n";
-        cout<<"3.Display\n";
-        cout<<"4.Quit\n";
+        cout<<"1. Insert\n";
+        cout<<"2. Delete\n";
+        cout<<"3. Display\n";
+        cout<<"4. Quit\n";
         cout<<"Enter your choice : ";
         cin>>choice;
         switch(choice)
@@ -157,14 +163,18 @@ int main()
                 cin>>priority;
                 pq.insert(name, priority);
                 break;
+
             case 2:
                 pq.del();
                 break;
+
             case 3:
                 pq.display();
                 break;
+
             case 4:
                 break;
+
             default :
                 cout<<"Wrong choice\n";
         }
