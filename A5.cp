@@ -14,6 +14,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 //------------------------------------------------
@@ -64,7 +65,7 @@ void insert( string name, int priority, char rank)
         //Check if no nodes exist or if temp node Priority
         //is less than the queue's front node.
         //(Front -> Back is Low -> High Priority)
-        if (front == NULL || (priority < front->priority && rank < front->rank)
+        if (front == NULL || (priority < front->priority && rank < front->rank))
         {
             tmp->next = front;
             front = tmp;
@@ -144,7 +145,7 @@ void display()
 int main()
 {
 
-    int choice, priority;
+    int choice, priority, rank;
     string name;
     pQueue pq;
     do
