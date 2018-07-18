@@ -128,10 +128,16 @@ public:
                 else
                 {
                     cout << "Queue is: \n";
-                    cout << setw(5) << "Priority" << " | " << "Name\n";
+                    cout << setw(5) << "Priority | " << "Name \t| " << "Rank\n";
                     while(ptr != NULL)
                     {
-                        cout << setw(5) << ptr->priority << " | " << ptr->name << endl;
+                        cout << setw(5) << ptr->priority << "    | " << ptr->name << "\t | ";
+                        if(ptr->rank == 1)
+                            cout << "General" << endl;
+                        else if(ptr->rank == 2)
+                            cout << "Sergeant" << endl;
+                        else
+                            cout << "Private" << endl;
 
                         ptr = ptr->next;
                     }
