@@ -37,31 +37,31 @@ struct node
 
 class pQueue
 {
-    
+
 private:
     node *front;
-    
+
 public:
     pQueue()
     {
         front = NULL;
     }
-    
+
     //------------------------------------------------
     /*
      * Insert into time Queue
      */
     //------------------------------------------------
-    
+
     void insert( string name, int priority, int rank)
     {
         node *tmp, *q;
-        
+
         //Temporary (new) Node to insert
         tmp = new node;
         tmp->name = name;
         tmp->priority = priority;
-        
+
         //Check if no nodes exist or if temp node Priority
         //is less than the queue's front node.
         //(Front -> Back is Low -> High Priority)
@@ -70,23 +70,23 @@ public:
                 tmp->next = front;
                 front = tmp;
             }
-            
+
             else
             {
                 q = front;
-                
+
                 //Find Spot in Queue based on priority of node
                 while(q->next != NULL && priority >= q->next->priority)
                     q = q->next;
-                
+
                 //Reassign ptrs
                 tmp->next = q->next;
                 q->next = tmp;
-                
+
             }
         }
-            
-            
+
+
             //------------------------------------------------
         /*
          * Delete from time Queue
@@ -99,13 +99,13 @@ public:
                 //if empty print nothing
                 if(front == NULL)
                     cout<<"Queue underflow\n";
-                
+
                 else
                 {
                     tmp = front;
                     cout << "Deleted item is: " << tmp->name << endl;
                     front = front->next;
-                    
+
                     free(tmp);
                 }
             }
@@ -117,14 +117,14 @@ public:
             void display()
             {
                 node *ptr;
-                
+
                 //pointers
                 ptr = front;
-                
+
                 //if empty print nothing
                 if (front == NULL)
                     cout<<"Empty";
-                
+
                 else
                 {
                     cout << "Queue is: \n";
@@ -132,13 +132,13 @@ public:
                     while(ptr != NULL)
                     {
                         cout << setw(5) << ptr->priority << " | " << ptr->name << endl;
-                        
+
                         ptr = ptr->next;
                     }
                 }
             }
         };
-            
+
             //------------------------------------------------
         /*
          * Main
@@ -146,7 +146,7 @@ public:
             //------------------------------------------------
             int main()
         {
-            
+
             int choice, priority,rank;
             string name;
             pQueue pq;
@@ -163,24 +163,31 @@ public:
                     case 1:
                         cout<<"Input the name to be added in the queue : ";
                         cin >> name;
-                        cout<<"Enter its rank : ";
+                        cout<<"Enter their rank : ";
+                        cout << "\n1: General\n2: Sergeant\n3: Private\n";
                         cin >> rank;
-                        cout<<"Enter its priority : ";
+                        while(rank != 1 && rank != 2 && rank != 3)
+                        {
+                            cout << "That is not a rank, try again: ";
+                            cin >> rank;
+                        }
+                        //cin >> rank;
+                        cout<<"Enter their priority : ";
                         cin >> priority;
                         pq.insert(name, priority, rank);
                         break;
-                        
+
                     case 2:
                         pq.del();
                         break;
-                        
+
                     case 3:
                         pq.display();
                         break;
-                        
+
                     case 4:
                         break;
-                        
+
                     default :
                         cout<<"Wrong choice\n";
                 }
