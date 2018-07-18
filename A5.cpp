@@ -50,6 +50,8 @@ public:
     //------------------------------------------------
     /*
      * Insert into time Queue
+     * Input: String name, Int Priority, Int rank
+     * Function:
      */
     //------------------------------------------------
 
@@ -66,7 +68,7 @@ public:
         //Check if no nodes exist or if temp node Priority
         //is less than the queue's front node.
         //(Front -> Back is Low -> High Priority)
-        if (front == NULL || (priority < front->priority && rank <= front->rank))
+        if (front == NULL || (priority <= front->priority && rank <= front->rank))
             {
                 tmp->next = front;
                 front = tmp;
