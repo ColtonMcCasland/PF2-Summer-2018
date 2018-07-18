@@ -66,7 +66,7 @@ public:
         //Check if no nodes exist or if temp node Priority
         //is less than the queue's front node.
         //(Front -> Back is Low -> High Priority)
-        if (front == NULL || (priority < front->priority && rank < front->rank))
+        if (front == NULL || (priority < front->priority && rank <= front->rank))
             {
                 tmp->next = front;
                 front = tmp;
@@ -75,10 +75,15 @@ public:
             else
             {
                 q = front;
-                // NOT SORTING CORRECTLY. IF YOU INSERT PRIORITY 2 BEFORE PRIORITY 1, IT PRINTS 2 THEN 1.
-                //Find Spot in Queue based on priority of node
-                while(q->next != NULL && (priority <= q->next->priority && rank <= q->next->rank))
-                    q = q->next;
+                //Find Spot in Queue based on Rank of node, Then priority
+                while(q->next != NULL && (rank >= q->next->rank))
+                {
+                    if(priority >= q->next->priority)
+                        while(priority >= q->next->priority)
+                            q = q->next;
+                    else
+                        q = q->next;
+                }
 
                 //Reassign ptrs
                 tmp->next = q->next;
