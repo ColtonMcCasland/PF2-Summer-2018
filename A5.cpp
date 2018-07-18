@@ -78,9 +78,13 @@ public:
                 //Find Spot in Queue based on Rank of node, Then priority
                 while(q->next != NULL && (rank >= q->next->rank))
                 {
-                    if(priority >= q->next->priority)
+                    //cout << "\nIn Rank Check\n";
+                    if(priority > q->next->priority)
+                    {
+                        //cout << "\nIn Priority Check\n";
                         while(priority >= q->next->priority)
                             q = q->next;
+                    }
                     else
                         q = q->next;
                 }
@@ -184,8 +188,13 @@ public:
                             cin >> rank;
                         }
                         //cin >> rank;
-                        cout<<"Enter their priority : ";
+                        cout<<"Enter their priority (1 - 5): ";
                         cin >> priority;
+                        while(priority != 1 && priority != 2 && priority != 3 && priority != 4 && priority != 5 )
+                        {
+                            cout << "That is not an allowed Priority, Try again: ";
+                            cin >> priority;
+                        }
                         pq.insert(name, priority, rank);
                         break;
 
