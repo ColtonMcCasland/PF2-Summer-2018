@@ -10,11 +10,11 @@
 //------------------------------------------------
 
 #include <iostream>
+#include <fstream>
 #include <queue>
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
-#include <fstream>
 #include <iomanip>
 
 using namespace std;
@@ -55,20 +55,23 @@ public:
      * Function: When called, inserts the new User by rank, then priority into the queue
      */
 
-void insert( string name, int priority, int rank)
+void insert( string name, int priority, int _rank)
 {
     node *tmp, *q;
+
+    bool priorityCheck = false;
+    bool rankCheck = false;
 
     //Temporary (new) Node to insert
     tmp = new node;
     tmp->name = name;
     tmp->priority = priority;
-    tmp->rank = rank;
+    tmp->rank = _rank;
 
     //Check if no nodes exist or if temp node Priority
     //is less than the queue's front node.
     //(Front -> Back is Low -> High Priority)
-    if (front == NULL || (priority <= front->priority && rank <= front->rank))
+    if (front == NULL || (priority <= front->priority && _rank <= front->rank))
         {
             tmp->next = front;
             front = tmp;
@@ -78,23 +81,14 @@ void insert( string name, int priority, int rank)
         {
             q = front;
             //Find Spot in Queue based on Rank of node, Then priority
-            // If the current rank is lower than the next rank in line, continue
-            while(q->next != NULL && (rank >= q->next->rank))
-            {
-                // If the priority is less than the next priority in line, continue
-                //cout << "\nIn Rank Check\n";
-                if(priority > q->next->priority)
-                {
-                    // Same thing, just in a while loop
-                    //cout << "\nIn Priority Check\n";
-                    while(priority >= q->next->priority)
-                        // If both conditions are true, go to the next pointer
-                        q = q->next;
-                }
-                // If only the rank is lower, go to the next pointer
+            while(q->next != NULL && (_rank >= q->next->rank))                              // If the current rank is lower than the next rank in line, continue
+                if(_rank > q->next->rank && !rankCheck)                                     // If the rank is larger than the next one
+                    q = q->next;                                                            // Move to the next node, sorting by rank THEN priority
                 else
-                    q = q->next;
-            }
+                    if((priority > q->next->priority) )                                     // (Rank should be sorted at this point) If the priority is larger than the next one
+                        q = q->next;                                                        // Move to the next node
+                    else                                                                    // Else, the priority is smaller
+                        break;                                                              // And it must be sorted, break the loop
 
             //Reassign ptrs
             tmp->next = q->next;
@@ -172,8 +166,8 @@ void display()
 
 int main()
 {
-    int choice, priority,rank;
-    string name;
+    int choice, priority, rank;
+    string name, prevName;
     pQueue pq;
     do
     {
@@ -181,6 +175,7 @@ int main()
         cout<<"2. Delete\n";
         cout<<"3. Display\n";
         cout<<"4. Quit\n";
+        cout<<"5. Load from a file\n";
         cout<<"Enter your choice: ";
         cin>>choice;
         switch(choice)
@@ -218,7 +213,37 @@ int main()
             case 4:
                 break;
 
-            default :
+            case 5:                 // Case for opening up a file with all of the information needed
+            {
+                fstream fin;                                                    // Creating the fstream named fin
+                string fileName = "";                                           // Creating a string to hold the filename
+                cout << "Input the file name please: ";                         // Asking the user for the file name
+                cin >> fileName;                                                // Assigning the value from the user to the filename string
+                fin.open(fileName.c_str());                                     // Attempt to open the file
+                if(fin.fail())                                                  // If the file cannot be opened,
+                {
+                    cout << "Unable to open filename " << fileName << endl;     // Print and error screen
+                    break;                                                      // Leave the program
+                }
+                prevName = "";                                                  // Set previous name to blank   (default values)
+                name = "";                                                      // Set name to blank            (default values)
+                rank = 0;                                                       // Set rank to 0                (default values)
+                priority = 0;                                                   // Set priority to 0            (default values)
+                fin >> name >> rank >> priority;                                // get the first person from the text file and input into the correct variables
+                pq.insert(name,priority,rank);                                  // Insert the first person into the queue
+                while(name != prevName)                                         // While the current name does not equal the previous name, continue (end of the file)
+                {
+                    prevName = name;                                            // Set previous name equal to the current name
+                    fin >> name >> rank >> priority;                            // get the next person form the text file and input into the correct variables
+                    pq.insert(name,priority,rank);                              // Insert the current person and their variables into the queue
+                }
+                pq.display();                                                   // Print out the current queue
+                cout << endl;                                                   // Create a new line
+                fin.close();                                                    // Close the text file
+                break;                                                          // Leave this case statement
+            }
+
+            default:
                 cout<<"Wrong choice\n";
         }
     }
