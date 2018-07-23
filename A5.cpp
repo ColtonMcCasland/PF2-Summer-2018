@@ -225,17 +225,18 @@ int main()
                     cout << "Unable to open filename " << fileName << endl;     // Print and error screen
                     break;                                                      // Leave the program
                 }
-                prevName = "";                                                  // Set previous name to blank   (default values)
                 name = "";                                                      // Set name to blank            (default values)
                 rank = 0;                                                       // Set rank to 0                (default values)
                 priority = 0;                                                   // Set priority to 0            (default values)
                 fin >> name >> rank >> priority;                                // get the first person from the text file and input into the correct variables
                 pq.insert(name,priority,rank);                                  // Insert the first person into the queue
-                while(name != prevName)                                         // While the current name does not equal the previous name, continue (end of the file)
+                while(!fin.eof())                                               // While the current name does not equal the previous name, continue (end of the file)
                 {
-                    prevName = name;                                            // Set previous name equal to the current name
                     fin >> name >> rank >> priority;                            // get the next person form the text file and input into the correct variables
-                    pq.insert(name,priority,rank);                              // Insert the current person and their variables into the queue
+                    if(name == "end")                                           // If we reach the end of the text file,
+                        break;                                                  // Leave the while loop
+                    else                                                        // Else
+                        pq.insert(name,priority,rank);                          // Insert the current person and their variables into the queue
                 }
                 pq.display();                                                   // Print out the current queue
                 cout << endl;                                                   // Create a new line
